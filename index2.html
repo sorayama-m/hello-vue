@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello Vue</title>
+</head>
+<body>
+  <script src="./vue.js"></script>
+  <div id="app">
+    <h1 :class="{ aqua: isActive, 'bg-blue': !isActive }">Hello Vue!</h1>
+    <h1 :class="classObject">Hello Vue!</h1>
+    <h1 :class="[color, bg]">Hello Vue!</h1>
+    <h1 :class="[{ aqua: isActive }, bg]">Hello Vue!</h1>
+    <button @click="isActive = !isActive">切り替え</button>
+
+    <h1 :style="{color: textColor, 'background-color': bgColor}">Hello Vue!</h1>
+    <h1 :style="[styleObject, baseStyles]">Hello Vue!</h1>
+    
+    <p>{{ counter }}</p>
+    <button @click="countUp">+1</button>
+    <button @click="countUp()">+1</button>
+    <p>{{ doubleCounterComputed }}</p>
+    <p>{{ doubleCounterMethod() }}</p>
+  </div>
+  <style>
+    .aqua {
+      color: aqua;
+    }
+    .bg-blue {
+      background-color: blue;
+    }
+  </style>
+  <script>
+    new Vue ({
+      el: '#app',
+      data: {
+        counter: 0,
+        isActive: true,
+        color: 'aqua',
+        bg: 'bg-blue',
+        textColor: 'aqua',
+        bgColor: 'blue',
+        styleObject: {
+          color: 'aqua',
+          'background-color': 'blue',
+        },
+        baseStyles: {
+          fontSize: '60px',
+        },
+      },
+      computed: {
+        doubleCounterComputed: function () {
+          return this.counter * 2;
+        },
+        classObject: function () {
+          return({
+            aqua: !this.isActive,
+            'bg-blue': this.isActive,
+          });
+        },
+      },
+      methods: {
+        countUp: function () {
+          this.counter += 1;
+        },
+        doubleCounterMethod: function () {
+          return this.counter * 2;
+        },
+      },
+    });
+  </script>
+</body>
+</html>

@@ -5,9 +5,143 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hello Vue</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body>
+  <script src="./vue.js"></script>
   <h1>Hello Vue!</h1>
+  <div id="app">
+    <p v-once>{{ message }}</p>
+    <p>{{ message2 }}</p>
+    <p>{{ number + 5 }}</p>
+    <p>{{ ok ? 'YES' : 'NO' }}</p>
+    <p>{{ sayHi() }}</p>
+    <p v-text="message"></p>
+    <p>
+      <a v-bind:href="url">Google</a>
+      <a :href="url">Google</a>
+      <a v-bind:[attribute]="url">Google</a>
+      <a v-bind:href="urlTwitter" v-bind:id="number">Twitter</a>
+      <a v-bind="{href: urlTwitter, id: number}">Twitter</a>
+      <a v-bind="twitterObject">Twitter</a>
+    </p>
+    <div v-html="html">{{ html }}</div>
+    <button v-on:click="reverseMessage">メッセージ反転</button>
+    <p>現在{{ count }}回クリックされています。</p>
+    <button v-on:click="count += 1">カウントアップ</button>
+    <button v-on:click="countUp">カウントアップ</button>
+    <button v-on:click="countUp()">カウントアップ</button>
+    <button v-on:click="countUp(2)">カウントアップ +2</button>
+    <button v-on:[event]="countUp2">カウントアップ</button>
+    <button @[event]="countUp2">カウントアップ</button>
+    <button @click="countUp2">カウントアップ</button>
+    <p v-on:mousemove="changeMouseposition">マウスを載せてください。</p>
+    <p v-on:mousemove="changeMouseposition2(3, $event)">マウスを載せてください。</p>
+    <p v-on:mousemove="changeMouseposition3">マウスを載せてください。<span v-on:mousemove="noEvent">反応しないでください。</span></p>
+    <p v-on:mousemove="changeMouseposition3">マウスを載せてください。<span v-on:mousemove.stop>反応しないでください。</span></p>
+    <p v-on:mousemove="changeMouseposition3">マウスを載せてください。<span v-on:mousemove.stop="console">反応しないでください。</span></p>
+    <p>X:{{ x }}、Y:{{ y }}</p>
+    <p>
+      <a v-on:click="noEvent2" href="https://google.com">Google</a>
+      <a v-on:click.prevent href="https://google.com">Google</a>
+      <a v-on:click.prevent="console" href="https://google.com">Google</a>
+    </p>
+    <p v-on:click="changeMouseposition3">マウスを載せてクリックしてください。<a v-on:click.prevent.stop="console" href="https://google.com">Google</a></p>
+    <input type="text" v-on:keyup="myAlert">
+    <input type="text" v-on:keyup.enter="myAlert">
+    <input type="text" v-on:keyup.space="myAlert">
+    <input type="text" v-on:keyup.space.enter="myAlert">
+    <br>
+    <hr>
+    <hr>
+    <hr>
+    <br>
+    <input type="text" v-model="message3">
+    <h1>{{ message3 }}</h1>
+    <p>{{ counter }}</p>
+    <button @click="counter += 1">+1</button>
+    <p>{{ counter > 3 ? '3より上' : '3以下' }}</p>
+    <p>{{ lessThanThreeComputed }}</p>
+    <p>{{ lessThanThreeMethod() }}</p>
+  </div>
+  <script>
+    new Vue ({
+      el: '#app',
+      data: {
+        message: 'HelloWorld!',
+        message2: 'Hello!!',
+        message3: 'こんにちは',
+        number: 3,
+        ok: true,
+        html: '<h1>h1です。</h1>',
+        url: 'https://google.com',
+        urlTwitter: 'https://twitter.com',
+        attribute: 'href',
+        number: 31,
+        count: 0,
+        counter: 0,
+        twitterObject: {
+          href: 'https://twitter.com', 
+          id: 31,
+        },
+        x: 0,
+        y: 0,
+        event: 'click',
+      },
+      computed: {
+        lessThanThreeComputed: function () {
+          return this.counter > 3 ? '3より上' : '3以下';
+        },
+      },
+      methods: {
+        lessThanThreeMethod: function () {
+          return this.counter > 3 ? '3より上' : '3以下';
+        },
+        reverseMessage: function () {
+          this.message2 = this.message2.split('').reverse().join('');
+        },
+        sayHi: function () {
+          this.message = 'Hello VueJS';
+          return 'Hi';
+        },
+        countUp: function (num = 0) {
+          if (isNaN(num)) {
+            num = 0;
+          }
+          let addNum = 1 * num;
+          this.count += addNum;
+        },
+        countUp2: function () {
+          this.count += 1;
+        },
+        changeMouseposition: function (e) {
+          this.x = e.clientX;
+          this.y = e.clientY;
+        },
+        changeMouseposition2: function (divideNumber = 0, e) {
+          if (isNaN(divideNumber)) {
+            divideNumber = 0;
+          }
+          this.x = e.clientX / divideNumber;
+          this.y = e.clientY / divideNumber;
+        },
+        changeMouseposition3: function (e) {
+          this.x = e.clientX;
+          this.y = e.clientY;
+        },
+        noEvent: function (e) {
+          e.stopPropagation();
+        },
+        noEvent2: function (e) {
+          e.preventDefault();
+        },
+        console: function () {
+          console.log('Stopしました。');
+        },
+        myAlert() {
+          alert('アラート！');
+        },
+      },
+    });
+  </script>
 </body>
 </html>

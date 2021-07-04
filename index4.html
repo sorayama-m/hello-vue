@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello Vue</title>
+</head>
+<body>
+  <script src="./vue.js"></script>
+  <div id="app1">
+    <p>message:{{ message }}</p>
+    <p>name:{{ name }}</p>
+    <p>mydata:{{ myData }}</p>
+    <button @click="message = 'ボタンから変更'">message変更</button>
+    <button @click="name = 'ボタンから変更'">name変更</button>
+  </div>
+  <div id="app2">
+    <p>{{ message }}</p>
+    <button @click="changeMessage1">インスタンス1のmessageを変更</button>
+  </div>
+  <div id="app3">
+    <p>{{ message }}</p>
+  </div>
+
+  <hr>
+
+  <div id="app4"></div>
+
+
+  <hr>
+
+  <div id="app5"></div>
+
+  <hr>
+
+  <div id="app6">
+    <h1>こんにちは、{{ name }}さん。</h1>
+    <button @click="name = 'Taro'">名前を変更</button>
+    <button @click="destroy">インスタンスを破壊</button>
+
+    <hr>
+    <hr>
+
+    <hello2></hello2>
+    <hello2></hello2>
+    <hello2></hello2>
+
+  </div>
+
+  <hr>
+
+  <!-- ひとつしか出ない。 -->
+  <div class="hello"></div>
+  <div class="hello"></div>
+  <hr>
+  <hello></hello>
+  <hello></hello>
+  <hello></hello>
+  <hr>
+
+  </div>
+
+  <script>
+
+    Vue.component('hello2', {
+      template: '<p>こんにちは</p>',
+    });
+    
+    new Vue({
+      el: '.hello',
+      template: '<p>こんにちは</p>',
+    });
+    new Vue({
+      el: 'hello',
+      template: '<p>こんにちは</p>',
+    });
+    
+    new Vue({
+      el: '#app6',
+      data: {
+        name: 'test',
+      },
+      beforeCreate: function () {
+        console.log('beforeCreate');
+      },
+      created: function () {
+        console.log('created');
+      },
+      beforeMount: function () {
+        console.log('beforeMount');
+      },
+      mounted: function () {
+        console.log('mounted');
+      },
+      beforeUpdate: function () {
+        console.log('beforeUpdate');
+      },
+      updated: function () {
+        console.log('updated');
+      },
+      beforeDestroy: function () {
+        console.log('beforeDestroy');
+      },
+      destroyed: function () {
+        console.log('destroyed');
+      },
+      methods: {
+        destroy: function () {
+          this.$destroy();
+        },
+      },
+    });
+    
+    new Vue({
+      el: '#app5',
+      data: {
+        name: 'test',
+      },
+      render: function (createElement) {
+        // 仮想DOM
+        console.log(createElement('h1', 'こんにちは、' + this.name + 'さん。'));
+        // ここでのcreateElementはhと書かれることもよくある。
+        return createElement('h1', 'こんにちは、' + this.name + 'さん。');
+      },
+    });
+    // これと↑は違う
+    var dir = document.createElement('div');
+    console.log(dir);
+    console.dir(dir);
+    console.log(document);
+    console.dir(document);
+
+    new Vue({
+      data: {
+        name: 'test',
+      },
+      template: '<h1>こんにちは、{{ name }}さん。</h1>',
+    }).$mount('#app4');
+
+    var data = {
+      message: 'インスタンス1',
+    };
+
+    var vm1 = new Vue ({
+      el: '#app1',
+      data: data,
+      computed: {
+        myData: function () {
+          return this.$data;
+        },
+      },
+    });
+
+    vm1.message = "書き換えられました。";
+
+    // 後から追加した場合リアクティブにならない。ゲッターとセッターが作られないため基本的には最初から空文字でも良いので設定しておく。
+    vm1.name = "test";
+
+    console.log(data === vm1.$data);
+    
+    console.log(vm1);
+    console.log(vm1.message);
+
+    // undefinde
+    console.log(vm1.data);
+    // 取得可能
+    console.log(vm1.$data);
+
+    var vm2 = new Vue ({
+      el: '#app2',
+      data: {
+        message: 'インスタンス2',
+      },
+      methods: {
+        changeMessage1: function () {
+          vm1.message = 'インスタンス2から変えました。';
+        },
+      },
+    });
+
+    var vm3 = new Vue ({
+      data: {
+        message: 'インスタンス3',
+      },
+    });
+
+    vm3.$mount('#app3');
+  </script>
+</body>
+</html>
